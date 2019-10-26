@@ -54,6 +54,15 @@ contract EIP721Example is EIP721 {
         return _approvalsForAll[msg.sender][operator];
     }
 
+    function burn(uint256 id) external {
+        address owner = _owners[id];
+        require(owner == msg.sender, "not owner");
+        _numTokensPerOwner[owner]--;
+        _owners[id] = address(0);
+        _approvals[id] = address(0); // is that required ?
+        emit Transfer(owner, address(0), id);
+    }
+
     function _transferFrom(address from, address to, uint256 id) internal {
         require(to != address(0), "to is zero address");
         require(from != address(0), "from is zero address");

@@ -2,7 +2,7 @@ import { store, Address, Bytes } from '@graphprotocol/graph-ts';
 import { Transfer, EIP721 } from '../generated/EIP721/EIP721';
 import { EIP721Token } from '../generated/schema';
 
-let zeroAddress = Address.fromHexString('0x0000000000000000000000000000000000000000');
+let zeroAddress = '0x0000000000000000000000000000000000000000';
 
 function toBytes(hexString: String): Bytes {
     let result = new Uint8Array(hexString.length/2);
@@ -34,10 +34,10 @@ export function handleTransfer(event: Transfer): void {
             let metadataURI = contract.tokenURI(tokenId)
             eip721Token.tokenURI = metadataURI; // only set it at creation
         }
-    } else if(event.params.to == zeroAddress) {
+    } else if(event.params.to.toHex() == zeroAddress) {
         store.remove('EIP721Token', id);
     }
-    if(event.params.to != zeroAddress) { // ignore transfer to zero
+    if(event.params.to.toHex() != zeroAddress) { // ignore transfer to zero
         eip721Token.owner = event.params.to;
         eip721Token.save();
     }

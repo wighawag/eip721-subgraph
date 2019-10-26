@@ -10,5 +10,11 @@ const {
 } = namedAccounts;
 
 (async () => {
-    // TODO   
+    const abi = JSON.parse(fs.readFileSync('./abis/EIP721.json').toString());
+    const contractsInfo = JSON.parse(fs.readFileSync('./test_deployments.json').toString());
+    const address = contractsInfo['1337']['EIP721Example'].address;
+    const tokenContract = new Contract(address, abi, ethersProvider.getSigner(others[0]));
+
+    const result = await tokenContract.functions.transferFrom(others[0], others[1], 2).then(tx => tx.wait());
+    console.log({result});
 })()
