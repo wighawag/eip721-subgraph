@@ -13,12 +13,12 @@ module.exports = async function({ethereum, namedAccounts, getDeployedContract}) 
 
     await registry
         .connect(ethersProvider.getSigner(others[0]))
-        .functions.createGravatar('Carl', 'https://thegraph.com/img/team/team_04.png')
+        .functions.createGravatar('Carl' + Date.now(), 'https://thegraph.com/img/team/team_04.png')
         .then(tx => tx.wait());
 
     await registry
         .connect(ethersProvider.getSigner(others[1]))
-        .functions.createGravatar('Lucas', 'https://thegraph.com/img/team/bw_Lucas.jpg')
+        .functions.createGravatar('Lucas' + Date.now(), 'https://thegraph.com/img/team/bw_Lucas.jpg')
         .then(tx => tx.wait());
 }
 

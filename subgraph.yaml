@@ -1,5 +1,5 @@
 specVersion: 0.0.2
-description: Gravatar for Ethereum
+description: EIP-721
 repository: https://github.com/wighawag/eip-721_subgraph
 schema:
   file: ./schema.graphql
@@ -8,7 +8,6 @@ dataSources:
     name: Gravity
     # network: mainnet
     source:
-      address: '0xd32ca877F667660631A98332Ae4000550B4A6374'
       abi: Gravity
     mapping:
       kind: ethereum/events
