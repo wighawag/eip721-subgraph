@@ -27,5 +27,13 @@ module.exports = async function({ethereum, namedAccounts, getDeployedContract}) 
     const EIP721ExampleWithMetadata = getDeployedContract('EIP721ExampleWithMetadata');
     const eip721ExampleWithMetadata = new Contract(EIP721ExampleWithMetadata.address, EIP721ExampleWithMetadata.abi, ethersProvider);
     await mint(eip721ExampleWithMetadata);
+
+    const FakeEIP721Example = getDeployedContract('FakeEIP721Example');
+    const fakeEip721Example = new Contract(FakeEIP721Example.address, FakeEIP721Example.abi, ethersProvider);
+    await mint(fakeEip721Example);
+
+    const FakeEIP721ExampleWithMetadata = getDeployedContract('FakeEIP721ExampleWithMetadata');
+    const fakeEip721ExampleWithMetadata = new Contract(FakeEIP721ExampleWithMetadata.address, FakeEIP721ExampleWithMetadata.abi, ethersProvider);
+    await mint(fakeEip721ExampleWithMetadata);
 }
 
