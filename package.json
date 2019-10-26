@@ -1,14 +1,14 @@
 {
-  "name": "eip-721_subgraph",
+  "name": "eip721-subgraph",
   "version": "0.1.0",
   "scripts": {
     "deploy-test-contracts": "rocketh launch -n http://localhost:8545 -q test_deployments.json",
-    "create-graph": "graph create wighawag/eip-721_subgraph --node https://api.thegraph.com/deploy/",
-    "create-local-graph": "graph create wighawag/eip-721_subgraph --node http://127.0.0.1:8020",
+    "create-graph": "graph create wighawag/eip721-subgraph --node https://api.thegraph.com/deploy/",
+    "create-local-graph": "graph create wighawag/eip721-subgraph --node http://127.0.0.1:8020",
     "codegen-graph": "graph codegen",
     "build-graph": "graph build",
-    "deploy-graph": "graph deploy wighawag/eip-721_subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "deploy-local-graph": "graph deploy wighawag/eip-721_subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
+    "deploy-graph": "graph deploy wighawag/eip721-subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy-local-graph": "graph deploy wighawag/eip721-subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.15.0",

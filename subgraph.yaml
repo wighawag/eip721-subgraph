@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 description: EIP-721
-repository: https://github.com/wighawag/eip-721_subgraph
+repository: https://github.com/wighawag/eip721-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
