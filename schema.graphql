@@ -3,5 +3,6 @@ type EIP721Token @entity {
   contractAddress: Bytes!
   tokenID: BigInt!
   owner: Bytes!
+  mintTime: BigInt!
   tokenURI: String
 }

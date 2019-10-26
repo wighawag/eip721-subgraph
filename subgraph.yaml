@@ -6,7 +6,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: EIP721
-    # network: mainnet
+    network: mainnet
     source:
       abi: EIP721
     mapping:

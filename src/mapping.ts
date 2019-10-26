@@ -14,9 +14,13 @@ function toBytes(hexString: String): Bytes {
 
 export function handleTransfer(event: Transfer): void {
     let contract = EIP721.bind(event.address);
-    let supportsEIP721 = contract.supportsInterface(toBytes('80ac58cd')) &&
-        contract.supportsInterface(toBytes('01ffc9a7')) &&
-        !contract.supportsInterface(toBytes('00000000'));
+    
+    let supportsEIP165Identifier = contract.try_supportsInterface(toBytes('01ffc9a7'));
+    let supportsEIP721Identifier = contract.try_supportsInterface(toBytes('80ac58cd'));
+    let supportsNullIdentifier = contract.try_supportsInterface(toBytes('00000000'));
+    let supportsEIP721 = (!supportsEIP165Identifier.reverted && supportsEIP165Identifier.value) &&
+        (!supportsEIP721Identifier.reverted && supportsEIP721Identifier.value) &&
+        (!supportsNullIdentifier.reverted && !supportsNullIdentifier.value);
 
     if(!supportsEIP721) {
         return;
@@ -29,10 +33,13 @@ export function handleTransfer(event: Transfer): void {
         eip721Token = new EIP721Token(id);
         eip721Token.contractAddress = event.address;
         eip721Token.tokenID = tokenId;
-        let supportsEIP721Metadata = contract.supportsInterface(toBytes('5b5e139f'));
-        if (supportsEIP721Metadata) {
-            let metadataURI = contract.tokenURI(tokenId)
-            eip721Token.tokenURI = metadataURI; // only set it at creation
+        eip721Token.mintTime = event.block.timestamp;
+        let supportsEIP721Metadata = contract.try_supportsInterface(toBytes('5b5e139f'));
+        if (!supportsEIP721Metadata.reverted && supportsEIP721Metadata.value) {
+            let metadataURI = contract.try_tokenURI(tokenId);
+            if(!metadataURI.reverted) {
+                eip721Token.tokenURI = metadataURI.value; // only set it at creation
+            }
         }
     } else if(event.params.to.toHex() == zeroAddress) {
         store.remove('EIP721Token', id);
