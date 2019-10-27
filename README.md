@@ -50,3 +50,22 @@ yarn deploy-local-graph
   }
 }
 ```
+
+
+or
+
+```
+{
+  eip721Tokens(orderBy: mintTime) {
+    contractAddress
+    tokenID
+    owner
+    tokenURI
+    mintTime
+  }
+  
+  contracts {
+    id
+  }
+}
+```

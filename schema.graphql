@@ -6,3 +6,9 @@ type EIP721Token @entity {
   mintTime: BigInt!
   tokenURI: String
 }
+
+type Contract @entity {
+  id: ID!
+  supportsEIP721: Boolean!
+  supportsEIP721Metadata: Boolean!
+}

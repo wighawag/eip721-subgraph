@@ -7,7 +7,7 @@
     "create-local-graph": "graph create wighawag/eip721-subgraph --node http://127.0.0.1:8020",
     "codegen-graph": "graph codegen",
     "build-graph": "graph build",
-    "deploy-graph": "graph deploy wighawag/eip721-subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy-graph": "graph deploy wighawag/eip721-subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --debug",
     "deploy-local-graph": "graph deploy wighawag/eip721-subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
   },
   "devDependencies": {
@@ -15,7 +15,7 @@
     "@graphprotocol/graph-ts": "^0.15.0",
     "ethers": "^5.0.0-beta.159",
     "ganache-core": "^2.8.0",
-    "rocketh": "^0.4.0",
+    "rocketh": "^0.4.1",
     "solc": "^0.5.12"
   },
   "dependencies": {}
