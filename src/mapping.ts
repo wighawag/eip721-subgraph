@@ -55,11 +55,11 @@ export function handleTransfer(event: Transfer): void {
         contractInfo = new Contract(event.address.toHex());
         log.debug('contract : {}',[event.address.toHexString()]);
         let supportsEIP165Identifier = supportsInterface(contract, '01ffc9a7');
-        log.debug('eip165 : {}, {}', [supportsEIP165Identifier ? 'true' : 'false']);
+        log.debug('eip165 : {}', [supportsEIP165Identifier ? 'true' : 'false']);
         let supportsEIP721Identifier = supportsInterface(contract, '80ac58cd');
-        log.debug('eip721 : {}, {}', [supportsEIP721Identifier ? 'true' : 'false']);
+        log.debug('eip721 : {}', [supportsEIP721Identifier ? 'true' : 'false']);
         let supportsNullIdentifierFalse = supportsInterface(contract, '00000000', false);
-        log.debug('eip165Null : {}, {}', [supportsNullIdentifierFalse ? 'true' : 'false']);
+        log.debug('eip165Null : {}', [supportsNullIdentifierFalse ? 'true' : 'false']);
         let supportsEIP721 = supportsEIP165Identifier &&
             supportsEIP721Identifier &&
             supportsNullIdentifierFalse;
@@ -67,7 +67,7 @@ export function handleTransfer(event: Transfer): void {
         let supportsEIP721Metadata = false;
         if(supportsEIP721) {
             supportsEIP721Metadata = supportsInterface(contract, '5b5e139f');
-            log.debug('eip721Metadata : {}, {}', [supportsEIP721Metadata ? 'true' : 'false']);
+            log.debug('eip721Metadata : {}', [supportsEIP721Metadata ? 'true' : 'false']);
         }
         contractInfo.supportsEIP721 = supportsEIP721;
         contractInfo.supportsEIP721Metadata = supportsEIP721Metadata;
