@@ -9,6 +9,7 @@ dataSources:
     network: mainnet
     source:
       abi: EIP721
+      startBlock: 4605167 # cryptokitties  // 6367157 for error
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -20,5 +21,19 @@ dataSources:
           file: ./abis/EIP721.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - event: Transfer(address,address,uint256)
+          handler: handleTransfer
+        - event: Transfer(indexed address,address,uint256)
+          handler: handleTransfer
+        - event: Transfer(address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Transfer(address,address,indexed uint256)
+          handler: handleTransfer
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Transfer(indexed address,address,indexed uint256)
+          handler: handleTransfer
+        - event: Transfer(address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/mapping.ts

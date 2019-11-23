@@ -1,6 +1,6 @@
 type EIP721Token @entity {
   id: ID!
-  contractAddress: Bytes!
+  contract: Contract!
   tokenID: BigInt!
   owner: Bytes!
   mintTime: BigInt!
@@ -9,6 +9,7 @@ type EIP721Token @entity {
 
 type Contract @entity {
   id: ID!
-  supportsEIP721: Boolean!
+  address: Bytes!
+  supportsCryptoKittyStandard: Boolean!
   supportsEIP721Metadata: Boolean!
 }
