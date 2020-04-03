@@ -75,6 +75,7 @@ export function handleTransfer(event: Transfer): void {
             contractInfo.supportsCryptoKittyStandard = supportsCryptoKittiesIdentifier;
             contractInfo.supportsEIP721Metadata = supportsEIP721Metadata;
             contractInfo.address = event.address;
+            contractInfo.tokens = [];
         } else {
             return;
         }
