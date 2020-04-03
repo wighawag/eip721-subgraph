@@ -12,4 +12,5 @@ type Contract @entity {
   address: Bytes!
   supportsCryptoKittyStandard: Boolean!
   supportsEIP721Metadata: Boolean!
+  tokens: [EIP721Token!]!
 }

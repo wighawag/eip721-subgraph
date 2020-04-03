@@ -9,7 +9,7 @@ dataSources:
     network: mainnet
     source:
       abi: EIP721
-      startBlock: 4605167 # cryptokitties  // 6367157 for error
+      startBlock: 5806610 #PoloDod (0x7b70405fba653cc8eff5afad1c5079d7da0a0247) # 4605167 # cryptokitties  // 6367157 for error
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -22,18 +22,18 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-        - event: Transfer(address,address,uint256)
-          handler: handleTransfer
-        - event: Transfer(indexed address,address,uint256)
-          handler: handleTransfer
-        - event: Transfer(address,indexed address,uint256)
-          handler: handleTransfer
-        - event: Transfer(address,address,indexed uint256)
-          handler: handleTransfer
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
-        - event: Transfer(indexed address,address,indexed uint256)
-          handler: handleTransfer
-        - event: Transfer(address,indexed address,indexed uint256)
-          handler: handleTransfer
+        # - event: Transfer(address,address,uint256)
+        #   handler: handleTransfer
+        # - event: Transfer(indexed address,address,uint256)
+        #   handler: handleTransfer
+        # - event: Transfer(address,indexed address,uint256)
+        #   handler: handleTransfer
+        # - event: Transfer(address,address,indexed uint256)
+        #   handler: handleTransfer
+        # - event: Transfer(indexed address,indexed address,uint256)
+        #   handler: handleTransfer
+        # - event: Transfer(indexed address,address,indexed uint256)
+        #   handler: handleTransfer
+        # - event: Transfer(address,indexed address,indexed uint256)
+        #   handler: handleTransfer
       file: ./src/mapping.ts

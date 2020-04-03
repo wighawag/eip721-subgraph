@@ -75,7 +75,6 @@ export function handleTransfer(event: Transfer): void {
             contractInfo.supportsCryptoKittyStandard = supportsCryptoKittiesIdentifier;
             contractInfo.supportsEIP721Metadata = supportsEIP721Metadata;
             contractInfo.address = event.address;
-            contractInfo.save();
         } else {
             return;
         }
@@ -106,5 +105,7 @@ export function handleTransfer(event: Transfer): void {
     if(event.params.to.toHex() != zeroAddress) { // ignore transfer to zero
         eip721Token.owner = event.params.to;
         eip721Token.save();
+        contractInfo.tokens.push(eip721Token.id);
+        contractInfo.save();
     }
 }
