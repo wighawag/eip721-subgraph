@@ -105,7 +105,9 @@ export function handleTransfer(event: Transfer): void {
     if(event.params.to.toHex() != zeroAddress) { // ignore transfer to zero
         eip721Token.owner = event.params.to;
         eip721Token.save();
-        contractInfo.tokens.push(eip721Token.id);
+        let tokens = contractInfo.tokens;
+        tokens.push(id)
+        contractInfo.tokens = tokens
         contractInfo.save();
     }
 }
