@@ -1,6 +1,6 @@
-import { store, Address, Bytes, EthereumValue } from '@graphprotocol/graph-ts';
+import { store, Address, Bytes, EthereumValue, BigInt } from '@graphprotocol/graph-ts';
 import { Transfer, EIP721 } from '../generated/EIP721/EIP721';
-import { EIP721Token, Contract } from '../generated/schema';
+import { EIP721Token, Contract, Owner } from '../generated/schema';
 
 import { log } from '@graphprotocol/graph-ts';
 
@@ -74,13 +74,31 @@ export function handleTransfer(event: Transfer): void {
             contractInfo = new Contract(event.address.toHex());
             contractInfo.supportsCryptoKittyStandard = supportsCryptoKittiesIdentifier;
             contractInfo.supportsEIP721Metadata = supportsEIP721Metadata;
-            contractInfo.address = event.address;
             contractInfo.tokens = [];
         } else {
             return;
         }
+        contractInfo.numOwners = BigInt.fromI32(0);
+        contractInfo.numTokens = BigInt.fromI32(0);
     }
 
+    let currentOwner = Owner.load(event.params.from.toHex());
+    if (currentOwner != null) {
+        currentOwner.numTokens = currentOwner.numTokens.minus(BigInt.fromI32(1));
+        let tokens = currentOwner.tokens;
+        let index = tokens.indexOf(event.params.id.toHex());
+        tokens.splice(index, 1);
+        currentOwner.tokens = tokens;
+        currentOwner.save();
+    }
+
+    let newOwner = Owner.load(event.params.to.toHex());
+    if (newOwner == null) {
+        newOwner = new Owner(event.params.to.toHex());
+        newOwner.numTokens = BigInt.fromI32(0);
+        newOwner.tokens = [];
+    }
+    
     let tokenId = event.params.id;
     let id = event.address.toHex() + '_' + tokenId.toHex();
     let eip721Token = EIP721Token.load(id);
@@ -93,22 +111,44 @@ export function handleTransfer(event: Transfer): void {
             let metadataURI = contract.try_tokenURI(tokenId);
             if(!metadataURI.reverted) {
                 eip721Token.tokenURI = metadataURI.value; // only set it at creation
+            } else {
+                eip721Token.tokenURI = "";
             }
         } else if (contractInfo.supportsCryptoKittyStandard) {
             let metadataURI = contract.try_tokenMetadata(tokenId, "");
             if(!metadataURI.reverted) {
                 eip721Token.tokenURI = metadataURI.value; // only set it at creation
+            } else {
+                eip721Token.tokenURI = "";
             }
+        } else {
+            eip721Token.tokenURI = "";
         }
     } else if(event.params.to.toHex() == zeroAddress) {
         store.remove('EIP721Token', id);
     }
     if(event.params.to.toHex() != zeroAddress) { // ignore transfer to zero
-        eip721Token.owner = event.params.to;
+        eip721Token.owner = newOwner.id;
         eip721Token.save();
+        
+        let ownerTokens = newOwner.tokens;
+        ownerTokens.push(eip721Token.id);
+        newOwner.tokens = ownerTokens;
+        newOwner.numTokens = newOwner.numTokens.plus(BigInt.fromI32(1));
+        newOwner.save();
+
         let tokens = contractInfo.tokens;
         tokens.push(id)
         contractInfo.tokens = tokens
+        contractInfo.numTokens = contractInfo.numTokens.plus(BigInt.fromI32(1));
+        contractInfo.save();
+    } else {
+        let tokens = contractInfo.tokens;
+        let index = tokens.indexOf(event.params.id.toHex());
+        tokens.splice(index, 1);
+        contractInfo.tokens = tokens;
+        contractInfo.numTokens = contractInfo.numTokens.minus(BigInt.fromI32(1));
         contractInfo.save();
     }
+
 }
