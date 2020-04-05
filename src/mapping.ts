@@ -45,7 +45,7 @@ export function handleTransfer(event: Transfer): void {
         }
         if (supportsEIP721) {
             tokenContract = new TokenContract(event.address.toHex());
-            tokenContract.ownOwnId = false;
+            tokenContract.doAllAddressesOwnTheirIdByDefault = false;
             tokenContract.supportsEIP721Metadata = supportsEIP721Metadata;
             tokenContract.tokens = [];
             tokenContract.numTokens = BigInt.fromI32(0);
@@ -57,6 +57,13 @@ export function handleTransfer(event: Transfer): void {
         let tokenContracts = all.tokenContracts
         tokenContracts.push(tokenContract.id);
         all.tokenContracts = tokenContracts;
+
+        let doAllAddressesOwnTheirIdByDefault = contract.try_doAllAddressesOwnTheirIdByDefault();
+        if(!doAllAddressesOwnTheirIdByDefault.reverted) {
+            tokenContract.doAllAddressesOwnTheirIdByDefault = doAllAddressesOwnTheirIdByDefault.value; // only set it at creation
+        } else {
+            tokenContract.doAllAddressesOwnTheirIdByDefault = false;
+        }
     }
 
     let currentTokenTypeOwnerId = event.address.toHex() + '_' + event.params.from.toHex();

@@ -17,7 +17,7 @@ type Token @entity {
 
 type TokenContract @entity {
   id: ID!
-  ownOwnId: Boolean!
+  doAllAddressesOwnTheirIdByDefault: Boolean!
   supportsEIP721Metadata: Boolean!
   tokens: [Token!]!
   numTokens: BigInt!

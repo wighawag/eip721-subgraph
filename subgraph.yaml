@@ -22,7 +22,7 @@ dataSources:
         - All
       abis:
         - name: EIP721
-          file: ./abis/EIP721.json
+          file: ./abis/All.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer

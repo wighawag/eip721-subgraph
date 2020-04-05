@@ -1,0 +1,17 @@
+[
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "doAllAddressesOwnTheirIdByDefault",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "pure",
+        "type": "function"
+      }
+]
