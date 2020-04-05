@@ -1,3 +1,9 @@
+type All @entity {
+  id: ID!
+  numTokens: BigInt!
+  numOwners: BigInt!
+}
+
 type EIP721Token @entity {
   id: ID!
   contract: Contract!
@@ -14,10 +20,20 @@ type Contract @entity {
   supportsEIP721Metadata: Boolean!
   tokens: [EIP721Token!]!
   numTokens: BigInt!
+  # numOwners: BigInt!
 }
 
 type Owner @entity {
   id: ID!
+  tokens: [EIP721Token!]!
+  numTokens: BigInt!
+}
+
+
+type OwnerOf @entity {
+  id: ID!
+  address: Bytes!
+  tokenAddress: Bytes!
   tokens: [EIP721Token!]!
   numTokens: BigInt!
 }
