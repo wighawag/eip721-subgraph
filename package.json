@@ -2,7 +2,7 @@
   "name": "eip721-subgraph",
   "version": "0.1.0",
   "scripts": {
-    "codegen-graph": "graph codegen",
+    "codegen-graph": "rm -Rf generated && graph codegen",
     "build-graph": "graph build",
     "externals-down": "docker-compose down -v",
     "externals": "docker-compose up",

@@ -4,28 +4,27 @@ type All @entity {
   numOwners: BigInt!
 }
 
-type EIP721Token @entity {
+type Token @entity {
   id: ID!
-  contract: Contract!
+  contract: TokenContract!
   tokenID: BigInt!
   owner: Owner!
   mintTime: BigInt!
   tokenURI: String!
 }
 
-type Contract @entity {
+type TokenContract @entity {
   id: ID!
-  supportsCryptoKittyStandard: Boolean!
-  # ownOwnId: Boolean!
+  ownOwnId: Boolean!
   supportsEIP721Metadata: Boolean!
-  tokens: [EIP721Token!]!
+  tokens: [Token!]!
   numTokens: BigInt!
   # numOwners: BigInt!
 }
 
 type Owner @entity {
   id: ID!
-  tokens: [EIP721Token!]!
+  tokens: [Token!]!
   numTokens: BigInt!
 }
 
@@ -33,7 +32,7 @@ type Owner @entity {
 type TokenTypeOwner @entity {
   id: ID!
   address: Bytes!
-  tokenAddress: Bytes!
-  tokens: [EIP721Token!]!
+  contractAddress: Bytes!
+  tokens: [Token!]!
   numTokens: BigInt!
 }
