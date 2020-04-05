@@ -1,6 +1,6 @@
 import { store, Address, Bytes, EthereumValue, BigInt } from '@graphprotocol/graph-ts';
 import { Transfer, EIP721 } from '../generated/EIP721/EIP721';
-import { EIP721Token, Contract, Owner, All, OwnerOf } from '../generated/schema';
+import { EIP721Token, Contract, Owner, All, TokenTypeOwner } from '../generated/schema';
 
 import { log } from '@graphprotocol/graph-ts';
 
@@ -89,6 +89,29 @@ export function handleTransfer(event: Transfer): void {
         }
     }
 
+    let currentTokenTypeOwnerId = event.address.toHex() + '_' + event.params.from.toHex();
+    let currentTokenTypeOwner = TokenTypeOwner.load(currentTokenTypeOwnerId);
+    if (currentTokenTypeOwner != null) {
+        currentTokenTypeOwner.address = event.params.from;
+        currentTokenTypeOwner.tokenAddress = event.address;
+        currentTokenTypeOwner.numTokens = currentTokenTypeOwner.numTokens.minus(BigInt.fromI32(1));
+        let tokens = currentTokenTypeOwner.tokens;
+        let index = tokens.indexOf(event.params.id.toHex());
+        tokens.splice(index, 1);
+        currentTokenTypeOwner.tokens = tokens;
+        currentTokenTypeOwner.save();
+    }
+
+    let newTokenTypeOwnerId = event.address.toHex() + '_' + event.params.to.toHex();
+    let newTokenTypeOwner = TokenTypeOwner.load(newTokenTypeOwnerId);
+    if (newTokenTypeOwner == null) {
+        newTokenTypeOwner = new TokenTypeOwner(newTokenTypeOwnerId);
+        newTokenTypeOwner.address = event.params.from;
+        newTokenTypeOwner.tokenAddress = event.address;
+        newTokenTypeOwner.numTokens = BigInt.fromI32(0);
+        newTokenTypeOwner.tokens = [];
+    }
+
     let currentOwner = Owner.load(event.params.from.toHex());
     if (currentOwner != null) {
         if (currentOwner.numTokens.equals(BigInt.fromI32(1))) {
@@ -143,14 +166,20 @@ export function handleTransfer(event: Transfer): void {
         eip721Token.owner = newOwner.id;
         eip721Token.save();
         
-        let ownerTokens = newOwner.tokens;
-        ownerTokens.push(eip721Token.id);
-        newOwner.tokens = ownerTokens;
+        let newOwnerTokens = newOwner.tokens;
+        newOwnerTokens.push(eip721Token.id);
+        newOwner.tokens = newOwnerTokens;
         if (newOwner.numTokens.equals(BigInt.fromI32(0))) {
             all.numOwners = all.numOwners.plus(BigInt.fromI32(1));
         }
         newOwner.numTokens = newOwner.numTokens.plus(BigInt.fromI32(1));
         newOwner.save();
+
+        let newTokenTypeOwnerTokens = newTokenTypeOwner.tokens;
+        newTokenTypeOwnerTokens.push(eip721Token.id);
+        newTokenTypeOwner.tokens = newTokenTypeOwnerTokens;
+        newTokenTypeOwner.numTokens = newTokenTypeOwner.numTokens.plus(BigInt.fromI32(1));
+        newTokenTypeOwner.save();
 
         let tokens = contractInfo.tokens;
         tokens.push(id)

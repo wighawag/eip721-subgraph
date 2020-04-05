@@ -30,7 +30,7 @@ type Owner @entity {
 }
 
 
-type OwnerOf @entity {
+type TokenTypeOwner @entity {
   id: ID!
   address: Bytes!
   tokenAddress: Bytes!
