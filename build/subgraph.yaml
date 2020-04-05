@@ -1,0 +1,24 @@
+specVersion: 0.0.2
+description: EIP-721
+repository: https://github.com/wighawag/eip721-subgraph
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: EIP721
+    network: mainnet
+    source:
+      abi: EIP721
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      entities:
+        - EIP721Token
+      abis:
+        - name: EIP721
+          file: EIP721\abis\EIP721.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: EIP721\EIP721.wasm

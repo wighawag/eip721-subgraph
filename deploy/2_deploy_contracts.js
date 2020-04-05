@@ -1,5 +1,6 @@
 
-module.exports = async function({namedAccounts, deploy}) {
+module.exports = async function({namedAccounts, deployments}) {
+    const {deploy} = deployments;
     const {
         deployer,
     } = namedAccounts;

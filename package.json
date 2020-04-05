@@ -2,24 +2,33 @@
   "name": "eip721-subgraph",
   "version": "0.1.0",
   "scripts": {
-    "test-contracts": "rocketh launch",
-    "deploy-test-contracts": "rocketh launch -n http://localhost:8545 -q test_deployments.json",
-    "create-local-graph": "graph create wighawag/eip721-subgraph --node http://127.0.0.1:8020",
     "codegen-graph": "graph codegen",
     "build-graph": "graph build",
-    "deploy-graph": "dotenv -- cross-var graph deploy --access-token $THEGRAPH_TOKEN wighawag/eip721-subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --debug",
-    "deploy-local-graph": "graph deploy wighawag/eip721-subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
+    "externals-down": "docker-compose down -v",
+    "externals": "docker-compose up",
+    "shell:externals": "newshell \"npm run externals\"",
+    "create-local-graph": "wait-on http-get://127.0.0.1:8000 && graph create wighawag/eip721-subgraph --node http://127.0.0.1:8020",
+    "deploy-local-contracts": "wait-on tcp:8545 && buidler --network localhost deploy",
+    "deploy-local-graph": "wait-on http://127.0.0.1:5001/api/v0/version http-get://127.0.0.1:8000 && graph deploy wighawag/eip721-subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "deploy-local": "npm-run-all -l --parallel deploy-local-contracts deploy-local-graph",
+    "create-and-deploy-local": "npm-run-all -l create-local-graph deploy-local",
+    "setup": "npm-run-all -l externals-down --parallel shell:externals create-local-graph",
+    "dev": "npm-run-all -l externals-down --parallel externals create-and-deploy-local",
+    "shell:dev": "npm-run-all -l externals-down --parallel shell:externals create-and-deploy-local",
+    "deploy-graph": "dotenv -- cross-var graph deploy --access-token $THEGRAPH_TOKEN wighawag/eip721-subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --debug"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.17.1",
     "@graphprotocol/graph-ts": "^0.17.0",
+    "@nomiclabs/buidler": "^1.2.0",
+    "buidler-deploy": "^0.0.11",
     "cross-var": "^1.1.0",
     "dotenv": "^8.2.0",
     "dotenv-cli": "^3.1.0",
-    "ethers": "^5.0.0-beta.159",
-    "ganache-core": "^2.8.0",
-    "rocketh": "^0.4.1",
-    "solc": "^0.5.12"
+    "ethers": "^5.0.0-beta.180",
+    "newshell": "^0.1.0",
+    "npm-run-all": "^4.1.5",
+    "wait-on": "^4.0.1"
   },
   "dependencies": {}
 }
