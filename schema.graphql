@@ -19,7 +19,7 @@ type TokenContract @entity {
   supportsEIP721Metadata: Boolean!
   tokens: [Token!]!
   numTokens: BigInt!
-  # numOwners: BigInt!
+  numOwners: BigInt!
 }
 
 type Owner @entity {
