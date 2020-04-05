@@ -1,5 +1,7 @@
 type All @entity {
   id: ID!
+  numTokenContracts: BigInt!
+  tokenContracts: [TokenContract!]!
   numTokens: BigInt!
   numOwners: BigInt!
 }

@@ -25,6 +25,8 @@ export function handleTransfer(event: Transfer): void {
         all = new All('all');
         all.numOwners = BigInt.fromI32(0);
         all.numTokens = BigInt.fromI32(0);
+        all.numTokenContracts = BigInt.fromI32(0);
+        all.tokenContracts = [];
     }
     
     let contract = EIP721.bind(event.address);
@@ -51,6 +53,10 @@ export function handleTransfer(event: Transfer): void {
         } else {
             return;
         }
+        all.numTokenContracts = all.numTokenContracts.plus(BigInt.fromI32(1));
+        let tokenContracts = all.tokenContracts
+        tokenContracts.push(tokenContract.id);
+        all.tokenContracts = tokenContracts;
     }
 
     let currentTokenTypeOwnerId = event.address.toHex() + '_' + event.params.from.toHex();
@@ -119,7 +125,7 @@ export function handleTransfer(event: Transfer): void {
         }
     } else if(event.params.to.toHex() == zeroAddress) {
         all.numTokens = all.numTokens.minus(BigInt.fromI32(1));
-        store.remove('EIP721Token', id);
+        store.remove('Token', id);
     }
     if(event.params.to.toHex() != zeroAddress) { // ignore transfer to zero
         all.numTokens = all.numTokens.plus(BigInt.fromI32(1));
