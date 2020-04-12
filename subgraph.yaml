@@ -18,7 +18,7 @@ dataSources:
         - Token
         - TokenContract
         - Owner
-        - TokenTypeOwner
+        - OwnerPerTokenContract
         - All
       abis:
         - name: EIP721

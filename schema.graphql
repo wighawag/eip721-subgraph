@@ -31,7 +31,7 @@ type Owner @entity {
 }
 
 
-type TokenTypeOwner @entity {
+type OwnerPerTokenContract @entity {
   id: ID!
   address: Bytes!
   contractAddress: Bytes!
