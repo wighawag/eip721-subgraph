@@ -1,14 +1,13 @@
 
-module.exports = async function({namedAccounts, deployments}) {
+module.exports = async function({getNamedAccounts, deployments}) {
     const {deploy} = deployments;
     const {
         deployer,
-    } = namedAccounts;
+    } = await getNamedAccounts();
 
     await deploy('EIP721Example', {from: deployer, gas: 3000000}, 'EIP721Example');
     await deploy('EIP721ExampleWithMetadata', {from: deployer, gas: 3000000}, 'EIP721ExampleWithMetadata');
-    await deploy('FakeEIP721Example', {from: deployer, gas: 3000000}, 'FakeEIP721Example');
-    await deploy('FakeEIP721ExampleWithMetadata', {from: deployer, gas: 3000000}, 'FakeEIP721ExampleWithMetadata');
-    await deploy('FailedEIP721Example', {from: deployer, gas: 3000000}, 'FailedEIP721Example');
-    await deploy('FailedEIP721ExampleWithMetadata', {from: deployer, gas: 3000000}, 'FailedEIP721ExampleWithMetadata');
+    // await deploy('EIP721ExampleWithoutEIP165', {from: deployer, gas: 3000000}, 'EIP721ExampleWithoutEIP165');
+    await deploy('EIP721ExampleWithWrongUint8Metadata', {from: deployer, gas: 3000000}, 'EIP721ExampleWithWrongUint8Metadata');
+    await deploy('EIP721ExampleWithWrongBytesMetadata', {from: deployer, gas: 3000000}, 'EIP721ExampleWithWrongBytesMetadata');
 }

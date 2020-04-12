@@ -23,6 +23,16 @@ contract EIP721Example is EIP721 {
         emit Transfer(address(0), to, lastId);
     }
 
+    // //////////////// FAKE TO TEST ////////////////////////////////////
+    function mintDuplicate(address to) external {
+        emit Transfer(address(0), to, lastId);
+    }
+
+    function burnNonExistant() external {
+        emit Transfer(msg.sender, address(0), lastId+1);
+    }
+    ////////////////////////////////////////////////////////////////////
+
     function ownerOf(uint256 id) external view returns (address) {
         address owner = _owners[id];
         require(owner != address(0), "token does not exists");

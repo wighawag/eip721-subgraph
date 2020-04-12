@@ -20,6 +20,7 @@ services:
       ipfs: 'ipfs:5001'
       ethereum: 'mainnet:http://ethereum:8545'
       RUST_LOG: info
+      GRAPH_LOG: debug
   ipfs:
     image: ipfs/go-ipfs
     ports:

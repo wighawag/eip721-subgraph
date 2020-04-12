@@ -1,9 +1,11 @@
 const fs = require('fs');
 usePlugin("buidler-deploy");
+usePlugin("buidler-ethers-v5");
 
 module.exports = {
   namedAccounts: {
     deployer: 0,
+    tester: 1,
     others: "from:2"
   },
   solc: {
@@ -16,4 +18,9 @@ module.exports = {
   paths: {
     sources: 'contracts'
   },
+  networks: {
+    localhost: {
+      live: true
+    }
+  }
 };

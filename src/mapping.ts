@@ -41,7 +41,7 @@ export function handleTransfer(event: Transfer): void {
         let supportsEIP721Metadata = false;
         if(supportsEIP721) {
             supportsEIP721Metadata = supportsInterface(contract, '5b5e139f');
-            // log.debug('eip721Metadata : {}', [supportsEIP721Metadata ? 'true' : 'false']);
+            log.debug('NEW CONTRACT eip721Metadata for {} : {}', [event.address.toHex(), supportsEIP721Metadata ? 'true' : 'false']);
         }
         if (supportsEIP721) {
             tokenContract = new TokenContract(event.address.toHex());
@@ -123,11 +123,14 @@ export function handleTransfer(event: Transfer): void {
         if (tokenContract.supportsEIP721Metadata) {
             let metadataURI = contract.try_tokenURI(tokenId);
             if(!metadataURI.reverted) {
+                log.debug('tokenURI value {} : {}', [tokenContract.id, metadataURI.value]);
                 eip721Token.tokenURI = metadataURI.value; // only set it at creation
             } else {
+                log.debug('tokenURI reverted {}', [tokenContract.id]);
                 eip721Token.tokenURI = "";
             }
         } else {
+            log.debug('tokenURI not supported {}', [tokenContract.id]);
             eip721Token.tokenURI = ""; // TODO null ?
         }
     } else if(event.params.to.toHex() == zeroAddress) {

@@ -4,3 +4,6 @@ generated/
 build/
 artifacts/
 cache/
+deployments/localhost_*
+log*
+contracts.json
