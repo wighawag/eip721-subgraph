@@ -9,7 +9,7 @@
     "shell:externals": "newshell \"npm run externals\"",
     "create-local-graph": "wait-on http-get://127.0.0.1:8000 && graph create wighawag/eip721-subgraph --node http://127.0.0.1:8020",
     "deploy-local-contracts": "wait-on tcp:8545 && buidler --network localhost deploy --export ./contracts.json",
-    "deploy-local-graph": "wait-on http://127.0.0.1:5001/api/v0/version http-get://127.0.0.1:8000 && graph deploy wighawag/eip721-subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "deploy-local-graph": "graph codegen && wait-on http://127.0.0.1:5001/api/v0/version http-get://127.0.0.1:8000 && graph deploy wighawag/eip721-subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "deploy-local": "npm-run-all -l --parallel deploy-local-contracts deploy-local-graph",
     "create-and-deploy-local": "npm-run-all -l create-local-graph deploy-local",
     "setup": "npm-run-all -l externals-down --parallel shell:externals create-local-graph",
