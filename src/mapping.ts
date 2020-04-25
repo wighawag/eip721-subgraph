@@ -19,6 +19,11 @@ function supportsInterface(contract: EIP721, interfaceId: String, expected : boo
     return !supports.reverted && supports.value == expected;
 }
 
+function setCharAt(str: string, index: i32, char: string): string {
+    if(index > str.length-1) return str;
+    return str.substr(0,index) + char + str.substr(index+1);
+}
+
 export function handleTransfer(event: Transfer): void {
     let tokenId = event.params.id;
     let id = event.address.toHex() + '_' + tokenId.toString();
@@ -38,7 +43,7 @@ export function handleTransfer(event: Transfer): void {
     let contract = EIP721.bind(event.address);
     let tokenContract = TokenContract.load(contractId);
     if(tokenContract == null) {
-        // log.info('contract : {}',[event.address.toHexString()]);
+        // log.error('contract : {}',[event.address.toHexString()]);
         let supportsEIP165Identifier = supportsInterface(contract, '01ffc9a7');
         let supportsEIP721Identifier = supportsInterface(contract, '80ac58cd');
         let supportsNullIdentifierFalse = supportsInterface(contract, '00000000', false);
@@ -47,7 +52,7 @@ export function handleTransfer(event: Transfer): void {
         let supportsEIP721Metadata = false;
         if(supportsEIP721) {
             supportsEIP721Metadata = supportsInterface(contract, '5b5e139f');
-            log.debug('NEW CONTRACT eip721Metadata for {} : {}', [contractId, supportsEIP721Metadata ? 'true' : 'false']);
+            log.error('NEW CONTRACT eip721Metadata for {} : {}', [event.address.toHex(), supportsEIP721Metadata ? 'true' : 'false']);
         }
         if (supportsEIP721) {
             tokenContract = new TokenContract(contractId);
@@ -127,14 +132,24 @@ export function handleTransfer(event: Transfer): void {
         if (tokenContract.supportsEIP721Metadata) {
             let metadataURI = contract.try_tokenURI(tokenId);
             if(!metadataURI.reverted) {
-                log.debug('tokenURI value {} : {}', [tokenContract.id, metadataURI.value]);
-                eip721Token.tokenURI = metadataURI.value; // only set it at creation
+                log.error('tokenURI value {} : {}', [tokenContract.id, metadataURI.value]);
+                let uri =  metadataURI.value;
+                if (uri.length === 1 && uri.charCodeAt(0) === 0) {
+                    eip721Token.tokenURI = "";    
+                } else {
+                    for (let i = 0; i < uri.length; i++) {
+                        if (uri.charCodeAt(i) === 0) {
+                            uri = setCharAt(uri, i, '\ufffd'); // graph-node db does not support string with '\u0000'
+                        }
+                    }
+                    eip721Token.tokenURI = uri;
+                }
             } else {
-                log.debug('tokenURI reverted {}', [tokenContract.id]);
+                log.error('tokenURI reverted {}', [tokenContract.id]);
                 eip721Token.tokenURI = "";
             }
         } else {
-            log.debug('tokenURI not supported {}', [tokenContract.id]);
+            log.error('tokenURI not supported {}', [tokenContract.id]);
             eip721Token.tokenURI = ""; // TODO null ?
         }
     } else if(to == zeroAddress) {
