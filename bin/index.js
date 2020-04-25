@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const graphCLI = require("@graphprotocol/graph-cli");
 const path = require('path');
 
