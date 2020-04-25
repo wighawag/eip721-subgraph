@@ -20,6 +20,12 @@ function supportsInterface(contract: EIP721, interfaceId: String, expected : boo
 }
 
 export function handleTransfer(event: Transfer): void {
+    let tokenId = event.params.id;
+    let id = event.address.toHex() + '_' + tokenId.toString();
+    let contractId = event.address.toHex();
+    let from = event.params.from.toHex();
+    let to = event.params.to.toHex();
+
     let all = All.load('all');
     if (all == null) {
         all = new All('all');
@@ -30,7 +36,7 @@ export function handleTransfer(event: Transfer): void {
     }
     
     let contract = EIP721.bind(event.address);
-    let tokenContract = TokenContract.load(event.address.toHex());
+    let tokenContract = TokenContract.load(contractId);
     if(tokenContract == null) {
         // log.info('contract : {}',[event.address.toHexString()]);
         let supportsEIP165Identifier = supportsInterface(contract, '01ffc9a7');
@@ -41,10 +47,10 @@ export function handleTransfer(event: Transfer): void {
         let supportsEIP721Metadata = false;
         if(supportsEIP721) {
             supportsEIP721Metadata = supportsInterface(contract, '5b5e139f');
-            log.debug('NEW CONTRACT eip721Metadata for {} : {}', [event.address.toHex(), supportsEIP721Metadata ? 'true' : 'false']);
+            log.debug('NEW CONTRACT eip721Metadata for {} : {}', [contractId, supportsEIP721Metadata ? 'true' : 'false']);
         }
         if (supportsEIP721) {
-            tokenContract = new TokenContract(event.address.toHex());
+            tokenContract = new TokenContract(contractId);
             tokenContract.doAllAddressesOwnTheirIdByDefault = false;
             tokenContract.supportsEIP721Metadata = supportsEIP721Metadata;
             tokenContract.tokens = [];
@@ -66,7 +72,7 @@ export function handleTransfer(event: Transfer): void {
         }
     }
 
-    let currentOwnerPerTokenContractId = event.address.toHex() + '_' + event.params.from.toHex();
+    let currentOwnerPerTokenContractId = contractId + '_' + from;
     let currentOwnerPerTokenContract = OwnerPerTokenContract.load(currentOwnerPerTokenContractId);
     if (currentOwnerPerTokenContract != null) {
         if (currentOwnerPerTokenContract.numTokens.equals(BigInt.fromI32(1))) {
@@ -76,13 +82,13 @@ export function handleTransfer(event: Transfer): void {
         currentOwnerPerTokenContract.contractAddress = event.address;
         currentOwnerPerTokenContract.numTokens = currentOwnerPerTokenContract.numTokens.minus(BigInt.fromI32(1));
         let tokens = currentOwnerPerTokenContract.tokens;
-        let index = tokens.indexOf(event.params.id.toHex());
+        let index = tokens.indexOf(id);
         tokens.splice(index, 1);
         currentOwnerPerTokenContract.tokens = tokens;
         currentOwnerPerTokenContract.save();
     }
 
-    let newOwnerPerTokenContractId = event.address.toHex() + '_' + event.params.to.toHex();
+    let newOwnerPerTokenContractId = contractId + '_' + to;
     let newOwnerPerTokenContract = OwnerPerTokenContract.load(newOwnerPerTokenContractId);
     if (newOwnerPerTokenContract == null) {
         newOwnerPerTokenContract = new OwnerPerTokenContract(newOwnerPerTokenContractId);
@@ -92,28 +98,26 @@ export function handleTransfer(event: Transfer): void {
         newOwnerPerTokenContract.tokens = [];
     }
 
-    let currentOwner = Owner.load(event.params.from.toHex());
+    let currentOwner = Owner.load(from);
     if (currentOwner != null) {
         if (currentOwner.numTokens.equals(BigInt.fromI32(1))) {
             all.numOwners = all.numOwners.minus(BigInt.fromI32(1));
         }
         currentOwner.numTokens = currentOwner.numTokens.minus(BigInt.fromI32(1));
         let tokens = currentOwner.tokens;
-        let index = tokens.indexOf(event.params.id.toHex());
+        let index = tokens.indexOf(id);
         tokens.splice(index, 1);
         currentOwner.tokens = tokens;
         currentOwner.save();
     }
 
-    let newOwner = Owner.load(event.params.to.toHex());
+    let newOwner = Owner.load(to);
     if (newOwner == null) {
-        newOwner = new Owner(event.params.to.toHex());
+        newOwner = new Owner(to);
         newOwner.numTokens = BigInt.fromI32(0);
         newOwner.tokens = [];
     }
     
-    let tokenId = event.params.id;
-    let id = event.address.toHex() + '_' + tokenId.toHex();
     let eip721Token = Token.load(id);
     if(eip721Token == null) {
         eip721Token = new Token(id);
@@ -133,11 +137,11 @@ export function handleTransfer(event: Transfer): void {
             log.debug('tokenURI not supported {}', [tokenContract.id]);
             eip721Token.tokenURI = ""; // TODO null ?
         }
-    } else if(event.params.to.toHex() == zeroAddress) {
+    } else if(to == zeroAddress) {
         all.numTokens = all.numTokens.minus(BigInt.fromI32(1));
         store.remove('Token', id);
     }
-    if(event.params.to.toHex() != zeroAddress) { // ignore transfer to zero
+    if(to != zeroAddress) { // ignore transfer to zero
         all.numTokens = all.numTokens.plus(BigInt.fromI32(1));
         eip721Token.owner = newOwner.id;
         eip721Token.save();
@@ -167,7 +171,7 @@ export function handleTransfer(event: Transfer): void {
         tokenContract.save();
     } else {
         let tokens = tokenContract.tokens;
-        let index = tokens.indexOf(event.params.id.toHex());
+        let index = tokens.indexOf(id);
         tokens.splice(index, 1);
         tokenContract.tokens = tokens;
         tokenContract.numTokens = tokenContract.numTokens.minus(BigInt.fromI32(1));
