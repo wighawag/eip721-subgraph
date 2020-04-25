@@ -9,7 +9,7 @@ dataSources:
     network: mainnet
     source:
       abi: EIP721
-      # startBlock: 6367157 erro on 0x00 string 
+      startBlock: 6367157 # erro on 0x00 string 
       # startBlock: 5806610 #PoloDod (0x7b70405fba653cc8eff5afad1c5079d7da0a0247) 
     mapping:
       kind: ethereum/events

@@ -1,4 +1,4 @@
-import { store, Address, Bytes, EthereumValue, BigInt } from '@graphprotocol/graph-ts';
+import { store, Bytes, BigInt } from '@graphprotocol/graph-ts';
 import { Transfer, EIP721 } from '../generated/EIP721/EIP721';
 import { Token, TokenContract, Owner, All, OwnerPerTokenContract } from '../generated/schema';
 
@@ -24,6 +24,19 @@ function setCharAt(str: string, index: i32, char: string): string {
     return str.substr(0,index) + char + str.substr(index+1);
 }
 
+function normalize(strValue: string): string {
+    if (strValue.length === 1 && strValue.charCodeAt(0) === 0) {
+        return "";    
+    } else {
+        for (let i = 0; i < strValue.length; i++) {
+            if (strValue.charCodeAt(i) === 0) {
+                strValue = setCharAt(strValue, i, '\ufffd'); // graph-node db does not support string with '\u0000'
+            }
+        }
+        return strValue;
+    }
+}
+
 export function handleTransfer(event: Transfer): void {
     let tokenId = event.params.id;
     let id = event.address.toHex() + '_' + tokenId.toString();
@@ -39,6 +52,7 @@ export function handleTransfer(event: Transfer): void {
         all.numTokenContracts = BigInt.fromI32(0);
         all.tokenContracts = [];
     }
+    all.lastBlock = event.block.number;
     
     let contract = EIP721.bind(event.address);
     let tokenContract = TokenContract.load(contractId);
@@ -61,6 +75,14 @@ export function handleTransfer(event: Transfer): void {
             tokenContract.tokens = [];
             tokenContract.numTokens = BigInt.fromI32(0);
             tokenContract.numOwners = BigInt.fromI32(0);
+            let name = contract.try_name();
+            if(!name.reverted) {
+                tokenContract.name = normalize(name.value);
+            }
+            let symbol = contract.try_symbol();
+            if(!name.reverted) {
+                tokenContract.symbol = normalize(name.symbol);
+            }
         } else {
             return;
         }
@@ -132,20 +154,8 @@ export function handleTransfer(event: Transfer): void {
         if (tokenContract.supportsEIP721Metadata) {
             let metadataURI = contract.try_tokenURI(tokenId);
             if(!metadataURI.reverted) {
-                log.error('tokenURI value {} : {}', [tokenContract.id, metadataURI.value]);
-                let uri =  metadataURI.value;
-                if (uri.length === 1 && uri.charCodeAt(0) === 0) {
-                    eip721Token.tokenURI = "";    
-                } else {
-                    for (let i = 0; i < uri.length; i++) {
-                        if (uri.charCodeAt(i) === 0) {
-                            uri = setCharAt(uri, i, '\ufffd'); // graph-node db does not support string with '\u0000'
-                        }
-                    }
-                    eip721Token.tokenURI = uri;
-                }
+                eip721Token.tokenURI = normalize(metadataURI.value);
             } else {
-                log.error('tokenURI reverted {}', [tokenContract.id]);
                 eip721Token.tokenURI = "";
             }
         } else {

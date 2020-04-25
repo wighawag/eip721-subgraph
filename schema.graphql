@@ -4,6 +4,7 @@ type All @entity {
   tokenContracts: [TokenContract!]!
   numTokens: BigInt!
   numOwners: BigInt!
+  lastBlock: BigInt!
 }
 
 type Token @entity {
@@ -17,6 +18,8 @@ type Token @entity {
 
 type TokenContract @entity {
   id: ID!
+  name: String,
+  symbol: String,
   doAllAddressesOwnTheirIdByDefault: Boolean!
   supportsEIP721Metadata: Boolean!
   tokens: [Token!]!
@@ -33,8 +36,8 @@ type Owner @entity {
 
 type OwnerPerTokenContract @entity {
   id: ID!
-  address: Bytes!
-  contractAddress: Bytes!
+  address: Bytes! # TODO Owner
+  contractAddress: Bytes! # TODO TokenContract
   tokens: [Token!]!
   numTokens: BigInt!
 }
