@@ -1,6 +1,8 @@
 {
   "name": "eip721-subgraph",
   "version": "0.1.0",
+  "license": "AGPL-3.0-only",
+  "bin": "bin/index.js",
   "scripts": {
     "codegen-graph": "rm -Rf generated && graph codegen",
     "build-graph": "graph build",
@@ -19,7 +21,6 @@
     "run:local": "cross-env BUIDLER_NETWORK=localhost node"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.17.1",
     "@graphprotocol/graph-ts": "^0.17.0",
     "@nomiclabs/buidler": "^1.2.0",
     "buidler-deploy": "^0.1.18",
@@ -33,5 +34,7 @@
     "npm-run-all": "^4.1.5",
     "wait-on": "^4.0.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@graphprotocol/graph-cli": "wighawag/graph-cli#add_main"
+  }
 }
