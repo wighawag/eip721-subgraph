@@ -448,10 +448,10 @@
   optionalDependencies:
     keytar "^5.0.0"
 
-"@graphprotocol/graph-ts@^0.17.0":
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-ts/-/graph-ts-0.17.0.tgz#dc20974989ddd754005e8f434a0757cb22914d7a"
-  integrity sha512-GnqHKobjEs+iEFzMmOZW3X7M+1KUeiZ4ggt+gb9ZRZ0MJ8eRBgjSsyl1/2dbHtP/hBCDfHTYumvFkKnA/C+tWA==
+"@graphprotocol/graph-ts@^0.18.1":
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-ts/-/graph-ts-0.18.1.tgz#6aadeb3e6c01f4373978bd7dd4409305ba64ffce"
+  integrity sha512-vwDZjsnHlRKg8vdR+bfPdHwDixf0ozY6FU9CyVjrGLQpsEEISoNwsSCriUXE4Wv57LhmZEl8Ce3dhiPoqsv9tg==
   dependencies:
     assemblyscript "https://github.com/AssemblyScript/assemblyscript#36040d5b5312f19a025782b5e36663823494c2f3"
 

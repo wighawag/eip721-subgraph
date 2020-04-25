@@ -1,6 +1,6 @@
 {
   "name": "eip721-subgraph",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "AGPL-3.0-only",
   "bin": "bin/index.js",
   "scripts": {
@@ -21,7 +21,7 @@
     "run:local": "cross-env BUIDLER_NETWORK=localhost node"
   },
   "devDependencies": {
-    "@graphprotocol/graph-ts": "^0.17.0",
+    "@graphprotocol/graph-ts": "^0.18.1",
     "@nomiclabs/buidler": "^1.2.0",
     "buidler-deploy": "^0.1.18",
     "buidler-ethers-v5": "^0.1.3",

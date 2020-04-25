@@ -80,8 +80,8 @@ export function handleTransfer(event: Transfer): void {
                 tokenContract.name = normalize(name.value);
             }
             let symbol = contract.try_symbol();
-            if(!name.reverted) {
-                tokenContract.symbol = normalize(name.symbol);
+            if(!symbol.reverted) {
+                tokenContract.symbol = normalize(symbol.value);
             }
         } else {
             return;
