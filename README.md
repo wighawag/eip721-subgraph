@@ -1,42 +1,26 @@
-## First step, have a ethereum node running
-ensure you have ganache running on 8545
+## Install
+
 ```
-ganache-cli -h 0.0.0.0
+yarn add eip721-subgraph
 ```
 
-## then ensure you have a graph node running
-setup a graph-node
+## use
+
+it provide you with a npm scripts "eip721-subgraph" that embed graph-cli
+
+
+Assuming you have a graph-node running locally you can use it as follow :
+
+### to create graph
+localhost example:
 ```
-git clone https://github.com/graphprotocol/graph-node/
-cd graph-node/docker
-docker-compose up
+eip721-subgraph create test/subgraphName --node http://127.0.0.1:8020
 ```
 
-## finally setup your subgraph 
-
-make sure you are in the subgraph repo folder, then
+### to deploy graph
+localhost example:
 ```
-yarn
-```
-
-and deploy contracts
-```
-yarn deploy-test-contracts
-```
-
-then generate code for graph
-```
-yarn codegen-graph
-```
-
-create graph
-```
-yarn create-local-graph
-```
-
-deploy graph
-```
-yarn deploy-local-graph
+eip721-subgraph deploy test/subgraphName --ipfs http://localhost:5001 --node http://127.0.0.1:8020
 ```
 
 ## example graphQL query
