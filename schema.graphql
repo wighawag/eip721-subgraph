@@ -1,7 +1,6 @@
 type All @entity {
   id: ID!
   numTokenContracts: BigInt!
-  tokenContracts: [TokenContract!]!
   numTokens: BigInt!
   numOwners: BigInt!
   lastBlock: BigInt!
@@ -22,14 +21,14 @@ type TokenContract @entity {
   symbol: String,
   doAllAddressesOwnTheirIdByDefault: Boolean!
   supportsEIP721Metadata: Boolean!
-  tokens: [Token!]!
+  tokens: [Token!]! @derivedFrom(field: "contract")
   numTokens: BigInt!
   numOwners: BigInt!
 }
 
 type Owner @entity {
   id: ID!
-  tokens: [Token!]!
+  tokens: [Token!]! @derivedFrom(field: "owner")
   numTokens: BigInt!
 }
 
@@ -38,6 +37,5 @@ type OwnerPerTokenContract @entity {
   id: ID!
   address: Bytes! # TODO Owner
   contractAddress: Bytes! # TODO TokenContract
-  tokens: [Token!]!
   numTokens: BigInt!
 }

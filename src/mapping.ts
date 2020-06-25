@@ -50,7 +50,6 @@ export function handleTransfer(event: Transfer): void {
         all.numOwners = BigInt.fromI32(0);
         all.numTokens = BigInt.fromI32(0);
         all.numTokenContracts = BigInt.fromI32(0);
-        all.tokenContracts = [];
     }
     all.lastBlock = event.block.number;
     
@@ -72,7 +71,6 @@ export function handleTransfer(event: Transfer): void {
             tokenContract = new TokenContract(contractId);
             tokenContract.doAllAddressesOwnTheirIdByDefault = false;
             tokenContract.supportsEIP721Metadata = supportsEIP721Metadata;
-            tokenContract.tokens = [];
             tokenContract.numTokens = BigInt.fromI32(0);
             tokenContract.numOwners = BigInt.fromI32(0);
             let name = contract.try_name();
@@ -87,9 +85,6 @@ export function handleTransfer(event: Transfer): void {
             return;
         }
         all.numTokenContracts = all.numTokenContracts.plus(BigInt.fromI32(1));
-        let tokenContracts = all.tokenContracts
-        tokenContracts.push(tokenContract.id);
-        all.tokenContracts = tokenContracts;
 
         let doAllAddressesOwnTheirIdByDefault = contract.try_doAllAddressesOwnTheirIdByDefault();
         if(!doAllAddressesOwnTheirIdByDefault.reverted) {
@@ -108,10 +103,6 @@ export function handleTransfer(event: Transfer): void {
         currentOwnerPerTokenContract.address = event.params.from;
         currentOwnerPerTokenContract.contractAddress = event.address;
         currentOwnerPerTokenContract.numTokens = currentOwnerPerTokenContract.numTokens.minus(BigInt.fromI32(1));
-        let tokens = currentOwnerPerTokenContract.tokens;
-        let index = tokens.indexOf(id);
-        tokens.splice(index, 1);
-        currentOwnerPerTokenContract.tokens = tokens;
         currentOwnerPerTokenContract.save();
     }
 
@@ -122,7 +113,6 @@ export function handleTransfer(event: Transfer): void {
         newOwnerPerTokenContract.address = event.params.from;
         newOwnerPerTokenContract.contractAddress = event.address;
         newOwnerPerTokenContract.numTokens = BigInt.fromI32(0);
-        newOwnerPerTokenContract.tokens = [];
     }
 
     let currentOwner = Owner.load(from);
@@ -131,10 +121,6 @@ export function handleTransfer(event: Transfer): void {
             all.numOwners = all.numOwners.minus(BigInt.fromI32(1));
         }
         currentOwner.numTokens = currentOwner.numTokens.minus(BigInt.fromI32(1));
-        let tokens = currentOwner.tokens;
-        let index = tokens.indexOf(id);
-        tokens.splice(index, 1);
-        currentOwner.tokens = tokens;
         currentOwner.save();
     }
 
@@ -142,7 +128,6 @@ export function handleTransfer(event: Transfer): void {
     if (newOwner == null) {
         newOwner = new Owner(to);
         newOwner.numTokens = BigInt.fromI32(0);
-        newOwner.tokens = [];
     }
     
     let eip721Token = Token.load(id);
@@ -170,35 +155,22 @@ export function handleTransfer(event: Transfer): void {
         all.numTokens = all.numTokens.plus(BigInt.fromI32(1));
         eip721Token.owner = newOwner.id;
         eip721Token.save();
-        
-        let newOwnerTokens = newOwner.tokens;
-        newOwnerTokens.push(eip721Token.id);
-        newOwner.tokens = newOwnerTokens;
+
         if (newOwner.numTokens.equals(BigInt.fromI32(0))) {
             all.numOwners = all.numOwners.plus(BigInt.fromI32(1));
         }
         newOwner.numTokens = newOwner.numTokens.plus(BigInt.fromI32(1));
         newOwner.save();
 
-        let newOwnerPerTokenContractTokens = newOwnerPerTokenContract.tokens;
-        newOwnerPerTokenContractTokens.push(eip721Token.id);
-        newOwnerPerTokenContract.tokens = newOwnerPerTokenContractTokens;
         if (newOwnerPerTokenContract.numTokens.equals(BigInt.fromI32(0))) {
             tokenContract.numOwners = tokenContract.numOwners.plus(BigInt.fromI32(1));
         }
         newOwnerPerTokenContract.numTokens = newOwnerPerTokenContract.numTokens.plus(BigInt.fromI32(1));
         newOwnerPerTokenContract.save();
 
-        let tokens = tokenContract.tokens;
-        tokens.push(id)
-        tokenContract.tokens = tokens
         tokenContract.numTokens = tokenContract.numTokens.plus(BigInt.fromI32(1));
         tokenContract.save();
     } else {
-        let tokens = tokenContract.tokens;
-        let index = tokens.indexOf(id);
-        tokens.splice(index, 1);
-        tokenContract.tokens = tokens;
         tokenContract.numTokens = tokenContract.numTokens.minus(BigInt.fromI32(1));
         tokenContract.save();
     }
