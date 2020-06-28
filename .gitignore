@@ -8,3 +8,4 @@ deployments/localhost_*
 log*
 contracts.json
 subgraph.yaml
+!templates/subgraph.yaml
