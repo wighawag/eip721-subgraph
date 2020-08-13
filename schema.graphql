@@ -3,7 +3,6 @@ type All @entity {
   numTokenContracts: BigInt!
   numTokens: BigInt!
   numOwners: BigInt!
-  lastBlock: BigInt!
 }
 
 type Token @entity {
@@ -35,7 +34,7 @@ type Owner @entity {
 
 type OwnerPerTokenContract @entity {
   id: ID!
-  address: Bytes! # TODO Owner
-  contractAddress: Bytes! # TODO TokenContract
+  owner: Owner!
+  contract: TokenContract!
   numTokens: BigInt!
 }
