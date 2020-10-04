@@ -1,29 +1,25 @@
-## Install
+# Install
 
-```
-yarn add eip721-subgraph
-```
+`npm i -D eip721-subgraph`
 
-## use
+# use
 
-it provide you with a npm scripts "eip721-subgraph" that embed graph-cli
+install `subgraph-deploy`
+
+`npm i -D subgraph-deploy`
 
 
-Assuming you have a graph-node running locally you can use it as follow :
+in your package.json you can add a script to deploy that subgraph in your running graph-node
 
-### to create graph
-localhost example:
-```
-eip721-subgraph create test/subgraphName --node http://127.0.0.1:8020
-```
-
-### to deploy graph
-localhost example:
-```
-eip721-subgraph deploy test/subgraphName --ipfs http://localhost:5001 --node http://127.0.0.1:8020
+```json
+{
+  "scripts": {
+    "deploy:eip721-subgraph": "subgraph-deploy -s wighawag/eip721-subgraph -f eip721-subgraph -i http://localhost:5001/api -g http://localhost:8020"
+  }
+}
 ```
 
-## example graphQL query
+# example graphQL query
 ```
 {
   eip721Tokens {
