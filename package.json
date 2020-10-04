@@ -1,8 +1,16 @@
 {
   "name": "eip721-subgraph",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "AGPL-3.0-only",
-  "bin": "bin/index.js",
+  "files": [
+    "src/",
+    "files/",
+    "LICENSE",
+    "README.md",
+    "build",
+    "subgraph.yanl",
+    "schema.graphql"
+  ],
   "scripts": {
     "local:setup": "wait-on http-get://127.0.0.1:8000 && graph create wighawag/eip721-subgraph --node http://127.0.0.1:8020",
     "codegen": "rm -Rf generated && graph codegen",
@@ -42,8 +50,5 @@
     "newshell": "^0.1.0",
     "npm-run-all": "^4.1.5",
     "wait-on": "^4.0.1"
-  },
-  "dependencies": {
-    "@graphprotocol/graph-cli": "wighawag/graph-cli#add_main"
   }
 }

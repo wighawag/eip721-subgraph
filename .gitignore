@@ -1,11 +1,7 @@
 node_modules/
 .env
 generated/
-build/
 artifacts/
 cache/
 deployments/localhost_*
-log*
 contracts.json
-subgraph.yaml
-!templates/subgraph.yaml

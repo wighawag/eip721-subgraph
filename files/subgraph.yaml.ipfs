@@ -1,0 +1,32 @@
+dataSources:
+  - kind: ethereum/contract
+    mapping:
+      abis:
+        - file:
+            /: /ipfs/QmTv2vPeM9WUtVcfm6855t8bxq76pHswcZ1PpQTGRWQoWj
+          name: EIP721
+      apiVersion: 0.0.4
+      entities:
+        - Token
+        - TokenContract
+        - Owner
+        - OwnerPerTokenContract
+        - All
+      eventHandlers:
+        - event: 'Transfer(indexed address,indexed address,indexed uint256)'
+          handler: handleTransfer
+      file:
+        /: /ipfs/QmQGGbVEF9F793VZ9S3Q2F89N2Qi17qbk4g9EfvYNGvC4L
+      kind: ethereum/events
+      language: wasm/assemblyscript
+    name: EIP721
+    network: mainnet
+    source:
+      abi: EIP721
+      startBlock: 0
+description: EIP-721
+repository: 'https://github.com/wighawag/eip721-subgraph'
+schema:
+  file:
+    /: /ipfs/QmXS4VUm7VndHZbqRcopbeNdVx6joCq7VECjy61N9GBwKT
+specVersion: 0.0.2

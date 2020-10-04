@@ -1,0 +1,40 @@
+type All @entity {
+  id: ID!
+  numTokenContracts: BigInt!
+  numTokens: BigInt!
+  numOwners: BigInt!
+}
+
+type Token @entity {
+  id: ID!
+  contract: TokenContract!
+  tokenID: BigInt!
+  owner: Owner!
+  mintTime: BigInt!
+  tokenURI: String!
+}
+
+type TokenContract @entity {
+  id: ID!
+  name: String,
+  symbol: String,
+  doAllAddressesOwnTheirIdByDefault: Boolean!
+  supportsEIP721Metadata: Boolean!
+  tokens: [Token!]! @derivedFrom(field: "contract")
+  numTokens: BigInt!
+  numOwners: BigInt!
+}
+
+type Owner @entity {
+  id: ID!
+  tokens: [Token!]! @derivedFrom(field: "owner")
+  numTokens: BigInt!
+}
+
+
+type OwnerPerTokenContract @entity {
+  id: ID!
+  owner: Owner!
+  contract: TokenContract!
+  numTokens: BigInt!
+}
