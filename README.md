@@ -22,8 +22,8 @@ in your package.json you can add a script to deploy that subgraph in your runnin
 # example graphQL query
 ```
 {
-  eip721Tokens {
-    contractAddress
+  tokens {
+    contract
     tokenID
     owner
     tokenURI
@@ -36,15 +36,15 @@ or
 
 ```
 {
-  eip721Tokens(orderBy: mintTime) {
-    contractAddress
+  tokens(orderBy: mintTime) {
+    contract
     tokenID
     owner
     tokenURI
     mintTime
   }
   
-  contracts {
+  tokenContracts {
     id
   }
 }
