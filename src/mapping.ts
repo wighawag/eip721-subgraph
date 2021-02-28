@@ -1,5 +1,5 @@
 import { store, Bytes, BigInt } from '@graphprotocol/graph-ts';
-import { Transfer, EIP721 } from '../generated/EIP721/EIP721';
+import { Transfer, EIP721 } from '../generated/templates/EIP721Template/EIP721';
 import { Token, TokenContract, Owner, All, OwnerPerTokenContract } from '../generated/schema';
 
 // import { log } from '@graphprotocol/graph-ts';

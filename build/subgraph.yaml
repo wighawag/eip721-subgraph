@@ -5,11 +5,32 @@ schema:
   file: schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: EIP721
-    network: mainnet
+    name: Emitter
+    network: null
+    source:
+      address: "0x55152e4f7d89635D16eb7Ab36f60df6072f8a2FF"
+      abi: EmitterContract
+      startBlock: 8151558
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - TokenContract
+        - All
+      abis:
+        - name: EmitterContract
+          file: Emitter\abis\Emitter.json
+      eventHandlers:
+        - event: ContractRegistered(indexed address,bytes4[])
+          handler: handleContract
+      file: Emitter\Emitter.wasm
+templates:
+  - kind: ethereum/contract
+    name: EIP721Template
+    network: null
     source:
       abi: EIP721
-      startBlock: 5806610
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -22,8 +43,8 @@ dataSources:
         - All
       abis:
         - name: EIP721
-          file: EIP721\abis\All.json
+          file: EIP721Template\abis\All.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-      file: EIP721\EIP721.wasm
+      file: templates\EIP721Template\EIP721Template.wasm

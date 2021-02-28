@@ -5,11 +5,32 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: EIP721
+    name: Emitter
+    network: {{chainName}}
+    source:
+      address: "{{contracts.Emitter.address}}"
+      abi: EmitterContract
+      startBlock: {{contracts.Emitter.blockNumber}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - TokenContract
+        - All
+      abis:
+        - name: EmitterContract
+          file: ./abis/Emitter.json
+      eventHandlers:
+        - event: ContractRegistered(indexed address,bytes4[])
+          handler: handleContract
+      file: ./src/emitter.ts
+templates:
+  - kind: ethereum/contract
+    name: EIP721Template
     network: {{chainName}}
     source:
       abi: EIP721
-      startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
