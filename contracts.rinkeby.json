@@ -3,8 +3,8 @@
   "chainId": "4",
   "contracts": {
     "Emitter": {
-      "blockNumber": 8151558,
-      "address": "0x55152e4f7d89635D16eb7Ab36f60df6072f8a2FF",
+      "blockNumber": 8151703,
+      "address": "0x8740a8Ed653c322Df12F80cfb85aA25409B3f5c3",
       "abi": [
         {
           "inputs": [
@@ -146,6 +146,19 @@
         {
           "inputs": [
             {
+              "internalType": "uint256",
+              "name": "newFee",
+              "type": "uint256"
+            }
+          ],
+          "name": "setFee",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
               "internalType": "bytes4",
               "name": "interfaceID",
               "type": "bytes4"
@@ -171,19 +184,6 @@
             }
           ],
           "name": "transferOwnership",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "newFee",
-              "type": "uint256"
-            }
-          ],
-          "name": "updateFee",
           "outputs": [],
           "stateMutability": "nonpayable",
           "type": "function"
