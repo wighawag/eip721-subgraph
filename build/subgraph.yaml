@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Emitter
-    network: null
+    network: rinkeby
     source:
-      address: "0x55152e4f7d89635D16eb7Ab36f60df6072f8a2FF"
+      address: "0x8740a8Ed653c322Df12F80cfb85aA25409B3f5c3"
       abi: EmitterContract
-      startBlock: 8151558
+      startBlock: 8151703
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -28,9 +28,9 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: EIP721Template
-    network: null
+    network: rinkeby
     source:
-      abi: EIP721
+      abi: AnyEIP721
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -42,8 +42,8 @@ templates:
         - OwnerPerTokenContract
         - All
       abis:
-        - name: EIP721
-          file: EIP721Template\abis\All.json
+        - name: AnyEIP721
+          file: EIP721Template\abis\AnyEIP721.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer

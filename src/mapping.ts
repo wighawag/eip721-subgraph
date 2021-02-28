@@ -1,41 +1,10 @@
 import { store, Bytes, BigInt } from '@graphprotocol/graph-ts';
-import { Transfer, EIP721 } from '../generated/templates/EIP721Template/EIP721';
+import { Transfer, AnyEIP721 } from '../generated/templates/EIP721Template/AnyEIP721';
 import { Token, TokenContract, Owner, All, OwnerPerTokenContract } from '../generated/schema';
-
-// import { log } from '@graphprotocol/graph-ts';
+import {normalize} from './utils';
+import { log } from '@graphprotocol/graph-ts';
 
 let zeroAddress = '0x0000000000000000000000000000000000000000';
-
-function toBytes(hexString: String): Bytes {
-    let result = new Uint8Array(hexString.length/2);
-    for (let i = 0; i < hexString.length; i += 2) {
-        result[i/2] = parseInt(hexString.substr(i, 2), 16) as u32;
-    }
-    return result as Bytes;
-}
-
-function supportsInterface(contract: EIP721, interfaceId: String, expected : boolean = true) : boolean {
-    let supports = contract.try_supportsInterface(toBytes(interfaceId));
-    return !supports.reverted && supports.value == expected;
-}
-
-function setCharAt(str: string, index: i32, char: string): string {
-    if(index > str.length-1) return str;
-    return str.substr(0,index) + char + str.substr(index+1);
-}
-
-function normalize(strValue: string): string {
-    if (strValue.length === 1 && strValue.charCodeAt(0) === 0) {
-        return "";    
-    } else {
-        for (let i = 0; i < strValue.length; i++) {
-            if (strValue.charCodeAt(i) === 0) {
-                strValue = setCharAt(strValue, i, '\ufffd'); // graph-node db does not support string with '\u0000'
-            }
-        }
-        return strValue;
-    }
-}
 
 export function handleTransfer(event: Transfer): void {
     let tokenId = event.params.id;
@@ -52,45 +21,10 @@ export function handleTransfer(event: Transfer): void {
         all.numTokenContracts = BigInt.fromI32(0);
     }
     
-    let contract = EIP721.bind(event.address);
+    let contract = AnyEIP721.bind(event.address);
     let tokenContract = TokenContract.load(contractId);
     if(tokenContract == null) {
-        // log.error('contract : {}',[event.address.toHexString()]);
-        let supportsEIP165Identifier = supportsInterface(contract, '01ffc9a7');
-        let supportsEIP721Identifier = supportsInterface(contract, '80ac58cd');
-        let supportsNullIdentifierFalse = supportsInterface(contract, '00000000', false);
-        let supportsEIP721 = supportsEIP165Identifier && supportsEIP721Identifier && supportsNullIdentifierFalse;
-
-        let supportsEIP721Metadata = false;
-        if(supportsEIP721) {
-            supportsEIP721Metadata = supportsInterface(contract, '5b5e139f');
-            // log.error('NEW CONTRACT eip721Metadata for {} : {}', [event.address.toHex(), supportsEIP721Metadata ? 'true' : 'false']);
-        }
-        if (supportsEIP721) {
-            tokenContract = new TokenContract(contractId);
-            tokenContract.doAllAddressesOwnTheirIdByDefault = false;
-            tokenContract.supportsEIP721Metadata = supportsEIP721Metadata;
-            tokenContract.numTokens = BigInt.fromI32(0);
-            tokenContract.numOwners = BigInt.fromI32(0);
-            let name = contract.try_name();
-            if(!name.reverted) {
-                tokenContract.name = normalize(name.value);
-            }
-            let symbol = contract.try_symbol();
-            if(!symbol.reverted) {
-                tokenContract.symbol = normalize(symbol.value);
-            }
-        } else {
-            return;
-        }
-        all.numTokenContracts = all.numTokenContracts.plus(BigInt.fromI32(1));
-
-        let doAllAddressesOwnTheirIdByDefault = contract.try_doAllAddressesOwnTheirIdByDefault();
-        if(!doAllAddressesOwnTheirIdByDefault.reverted) {
-            tokenContract.doAllAddressesOwnTheirIdByDefault = doAllAddressesOwnTheirIdByDefault.value; // only set it at creation
-        } else {
-            tokenContract.doAllAddressesOwnTheirIdByDefault = false;
-        }
+        log.error('contract : {}',[event.address.toHexString()]);
     }
 
     if (from != zeroAddress || to != zeroAddress) { // skip if from zero to zero

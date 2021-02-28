@@ -6,14 +6,14 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Emitter
-    network: {{chainName}}
+    network: {{name}}
     source:
       address: "{{contracts.Emitter.address}}"
       abi: EmitterContract
       startBlock: {{contracts.Emitter.blockNumber}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.3
       language: wasm/assemblyscript
       entities:
         - TokenContract
@@ -28,12 +28,12 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: EIP721Template
-    network: {{chainName}}
+    network: {{name}}
     source:
-      abi: EIP721
+      abi: AnyEIP721
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.3
       language: wasm/assemblyscript
       entities:
         - Token
@@ -42,8 +42,8 @@ templates:
         - OwnerPerTokenContract
         - All
       abis:
-        - name: EIP721
-          file: ./abis/All.json
+        - name: AnyEIP721
+          file: ./abis/AnyEIP721.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
