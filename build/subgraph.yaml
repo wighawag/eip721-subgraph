@@ -21,6 +21,8 @@ dataSources:
       abis:
         - name: EmitterContract
           file: Emitter\abis\Emitter.json
+        - name: AnyEIP721
+          file: Emitter\abis\AnyEIP721.json
       eventHandlers:
         - event: ContractRegistered(indexed address,bytes4[])
           handler: handleContract
