@@ -22,8 +22,8 @@ dataSources:
         - All
       abis:
         - name: EIP721
-          file: EIP721\abis\All.json
+          file: EIP721/abis/All.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-      file: EIP721\EIP721.wasm
+      file: EIP721/EIP721.wasm

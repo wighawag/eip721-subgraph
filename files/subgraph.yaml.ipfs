@@ -16,7 +16,7 @@ dataSources:
         - event: 'Transfer(indexed address,indexed address,indexed uint256)'
           handler: handleTransfer
       file:
-        /: /ipfs/QmQGGbVEF9F793VZ9S3Q2F89N2Qi17qbk4g9EfvYNGvC4L
+        /: /ipfs/QmUgqWty2vQixazZwKzFCdhZauFsF3mMYSmdbAAitfmjUB
       kind: ethereum/events
       language: wasm/assemblyscript
     name: EIP721
