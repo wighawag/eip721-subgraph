@@ -143,7 +143,10 @@ export function handleTransfer(event: Transfer): void {
                 }
             }
             
-            all.numTokens = all.numTokens.plus(BigInt.fromI32(1));
+            if (from == zeroAddress) { // mint +1
+                all.numTokens = all.numTokens.plus(BigInt.fromI32(1));
+            }
+            
             eip721Token.owner = newOwner.id;
             eip721Token.save();
 
