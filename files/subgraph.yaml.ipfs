@@ -23,7 +23,6 @@ dataSources:
     network: mainnet
     source:
       abi: EIP721
-      startBlock: 5806610
 description: EIP-721
 repository: 'https://github.com/wighawag/eip721-subgraph'
 schema:
