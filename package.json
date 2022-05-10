@@ -35,7 +35,7 @@
     "generate": "node generate.js",
     "local:redeploy": "graph codegen && wait-on http://127.0.0.1:5001/api/v0/version http-get://127.0.0.1:8000 && graph deploy wighawag/eip721-subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "local:deploy": "npm-run-all \"generate mainnet 0\" local:redeploy --",
-    "mainnet:redeploy": "dotenv -- cross-var graph deploy --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --access-token 20d56681791942c3adc95a3f8915ad16 wighawag/eip721-subgraph",
+    "mainnet:redeploy": "dotenv -- cross-var graph deploy --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --access-token $THEGRAPH_TOKEN wighawag/eip721-subgraph",
     "mainnet:deploy": "npm-run-all \"generate mainnet 5806610\" mainnet:redeploy --",
     "rinkeby:redeploy": "dotenv -- cross-var graph deploy --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --debug --access-token $THEGRAPH_TOKEN wighawag/eip721-subgraph-rinkeby",
     "rinkeby:deploy": "npm-run-all \"generate rinkeby 0\" rinkeby:redeploy --",
