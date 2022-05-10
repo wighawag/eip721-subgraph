@@ -16,14 +16,13 @@ dataSources:
         - event: 'Transfer(indexed address,indexed address,indexed uint256)'
           handler: handleTransfer
       file:
-        /: /ipfs/QmUgqWty2vQixazZwKzFCdhZauFsF3mMYSmdbAAitfmjUB
+        /: /ipfs/QmdLECGv8fYjEVwg9fR7EFs1SyAahK2LXwqRXLU1FSZGiH
       kind: ethereum/events
       language: wasm/assemblyscript
     name: EIP721
     network: mainnet
     source:
       abi: EIP721
-      startBlock: 0
 description: EIP-721
 repository: 'https://github.com/wighawag/eip721-subgraph'
 schema:
